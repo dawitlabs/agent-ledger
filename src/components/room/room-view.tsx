@@ -33,6 +33,7 @@ export function RoomView({
   initialRoom: Room;
   user: User;
 }) {
+  const memberHint = initialRoom.members.find((m) => m.userId === user.id);
   const {
     room,
     presence,
@@ -41,7 +42,28 @@ export function RoomView({
     setQuery,
     filteredEvents,
     refresh,
-  } = useRoomLive(initialRoom.id, initialRoom);
+    transport,
+  } = useRoomLive(
+    initialRoom.id,
+    initialRoom,
+    memberHint
+      ? {
+          userId: user.id,
+          name: user.name,
+          initials: user.initials,
+          color: user.color,
+          role: memberHint.role,
+          lastSeen: Date.now(),
+        }
+      : {
+          userId: user.id,
+          name: user.name,
+          initials: user.initials,
+          color: user.color,
+          role: "viewer",
+          lastSeen: Date.now(),
+        },
+  );
 
   const [steer, setSteer] = useState("");
   const [comment, setComment] = useState("");
@@ -148,7 +170,11 @@ export function RoomView({
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status={room.status} />
             <PixelBadge className="bg-background">
-              {connected ? "realtime" : "reconnecting"}
+              {connected
+                ? transport === "supabase"
+                  ? "supabase live"
+                  : "realtime"
+                : "reconnecting"}
             </PixelBadge>
             {member ? (
               <PixelBadge className="bg-background">{member.role}</PixelBadge>

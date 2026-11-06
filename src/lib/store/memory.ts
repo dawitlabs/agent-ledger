@@ -84,6 +84,11 @@ function emit(roomId: string, payload: unknown) {
   }
 }
 
+/** Used by the Supabase store to fan out to in-process SSE subscribers. */
+export function emitExternal(roomId: string, payload: unknown) {
+  emit(roomId, payload);
+}
+
 function seedDemoRooms(state: StoreState) {
   const owner = DEMO_USERS[0];
   const now = new Date().toISOString();

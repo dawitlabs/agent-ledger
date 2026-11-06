@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
-import { isAgentRunning, runAgent } from "@/lib/agent-runner";
+import { isAgentRunning } from "@/lib/agent-runner";
+import { enqueueAgentRun } from "@/lib/agent-workflow";
 import { getRoom, steerRoom } from "@/lib/store";
 
 export async function POST(
@@ -33,7 +34,7 @@ export async function POST(
       updated.status === "paused") &&
     !isAgentRunning(id)
   ) {
-    void runAgent(id);
+    await enqueueAgentRun(id);
   }
 
   return NextResponse.json({ room: updated });

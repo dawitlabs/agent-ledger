@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
-import { isAgentRunning, runAgent } from "@/lib/agent-runner";
+import { isAgentRunning } from "@/lib/agent-runner";
+import { enqueueAgentRun } from "@/lib/agent-workflow";
 import { appendEvent, getRoom, setStatus } from "@/lib/store";
 
 export async function POST(
@@ -33,8 +34,6 @@ export async function POST(
   });
   await setStatus(id, "running");
 
-  // Fire-and-forget for the demo runner
-  void runAgent(id);
-
-  return NextResponse.json({ ok: true });
+  const result = await enqueueAgentRun(id);
+  return NextResponse.json({ ok: true, ...result });
 }

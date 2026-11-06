@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { ArrowRight, Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PixelBadge, PixelFrame } from "@/components/pixel/pixel-frame";
+import { PixelGradientBg } from "@/components/landing/pixel-gradient-bg";
 
 const LIVE_STEPS = [
   { kind: "plan", label: "Plan · 4 steps" },
@@ -15,12 +16,13 @@ const LIVE_STEPS = [
 
 export function LandingHero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-ink" />
-      <div className="absolute inset-0 grid-noise opacity-40" />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
+    <section className="relative min-h-[100svh] overflow-hidden bg-[#060608]">
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <PixelGradientBg />
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-28 bg-gradient-to-t from-background to-transparent" />
 
-      <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col px-5 pb-16 pt-6 md:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col px-5 pb-16 pt-6 md:px-8">
         <header className="flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2 text-primary-foreground">
             <span className="inline-flex size-8 items-center justify-center border-2 border-primary-foreground bg-foreground text-background shadow-pixel">
